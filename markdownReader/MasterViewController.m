@@ -12,6 +12,11 @@
 @interface MasterViewController ()
 
 @property NSMutableArray *objects;
+@property dispatch_queue_t backgroundQueue;
+@property NSOperationQueue *presentedItemOperationQueue;
+@property NSURL *presentedItemURL;
+@property NSFileCoordinator *fileCoordinator;
+
 @end
 
 @implementation MasterViewController
@@ -24,11 +29,37 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    _backgroundQueue = dispatch_queue_create("com.robertdiamond.directoryfetcher", DISPATCH_QUEUE_SERIAL);
+    NSArray *documentUrls = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+    if ([documentUrls count] > 0) {
+        _presentedItemURL = documentUrls[0];
+        _presentedItemOperationQueue = [NSOperationQueue new];
+        [_presentedItemOperationQueue setUnderlyingQueue:_backgroundQueue];
+        _fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:self];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
+    if (![[NSFileCoordinator filePresenters] containsObject:self]) {
+        [NSFileCoordinator addFilePresenter:self];
+    }
     [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if ([[NSFileCoordinator filePresenters] containsObject:self]) {
+        [NSFileCoordinator removeFilePresenter:self];
+    }
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    // traverse the Documents directory and collect files
+    [self _discoverDocuments];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,4 +121,35 @@
     }
 }
 
+#pragma mark - FilePresenter
+- (void)presentedItemDidChange
+{
+    [self _discoverDocuments];
+}
+
+#pragma mark - Internal Methods
+- (void)_discoverDocuments
+{
+    dispatch_async(_backgroundQueue, ^{
+        NSMutableArray *documentFiles = [NSMutableArray array];
+        for (NSURL *entry in [[NSFileManager defaultManager] enumeratorAtURL:self.presentedItemURL includingPropertiesForKeys:@[NSURLIsRegularFileKey, NSURLIsReadableKey, NSURLNameKey] options:0 errorHandler:nil]) {
+            NSDictionary<NSString *,id> *resourceValues = [entry resourceValuesForKeys:@[NSURLIsRegularFileKey, NSURLIsReadableKey, NSURLNameKey] error:nil];
+            if (![resourceValues[NSURLIsRegularFileKey] boolValue] || ![resourceValues[NSURLIsReadableKey] boolValue]) {
+                continue;
+            }
+            NSString *fileName = resourceValues[NSURLNameKey];
+            if (![fileName hasSuffix:@".md"]) {
+                continue;
+            }
+            [documentFiles addObject:fileName];
+        }
+        [documentFiles sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            return [(NSString *)obj1 compare:(NSString *)obj2];
+        }];
+        self.objects = documentFiles;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    });
+}
 @end
