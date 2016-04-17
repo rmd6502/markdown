@@ -53,73 +53,73 @@
 - (NSDictionary *)_rendererCallbacks
 {
     return @{
-             @"code": ^NSString *(NSString *code, NSString *language) {
+             @"code": ^JSValue *(NSString *code, NSString *language) {
                  //NSLog(@"code %@ %@", code, language);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"code", @"text": code, @"language": language} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"code", @"text": code, @"language": language} inContext:self.context];
              },
-             @"blockquote": ^NSString *(NSString *quote) {
+             @"blockquote": ^JSValue *(NSString *quote) {
                  //NSLog(@"bq %@", quote);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"bq", @"text": quote} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"bq", @"text": quote} inContext:self.context];
              },
-             @"html": ^NSString *(NSString *htmltext) {
+             @"html": ^JSValue *(NSString *htmltext) {
                  //NSLog(@"html %@", htmltext);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"html", @"text": htmltext} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"html", @"text": htmltext} inContext:self.context];
              },
-             @"heading": ^NSString *(NSString *headingtext, NSNumber *level) {
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"heading", @"text": headingtext, @"level": level} options:0 error:nil] encoding:NSUTF8StringEncoding];
+             @"heading": ^JSValue *(NSString *headingtext, NSNumber *level) {
+                 return [JSValue valueWithObject:@{@"type": @"heading", @"text": headingtext, @"level": level} inContext:self.context];
              },
-             @"hr": ^NSString *() {
+             @"hr": ^JSValue *() {
                  //NSLog(@"hr");
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"hr"} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"hr"} inContext:self.context];
              },
-             @"list": ^NSString *(NSString *body, NSNumber *ordered) {
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"list", @"body": body, @"ordered": ordered} options:0 error:nil] encoding:NSUTF8StringEncoding];
+             @"list": ^JSValue *(JSValue *body, NSNumber *ordered) {
+                 return [JSValue valueWithObject:@{@"type": @"list", @"body": body, @"ordered": ordered} inContext:self.context];
              },
-             @"listitem": ^NSString *(NSString *itemtext) {
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"li", @"text": itemtext} options:0 error:nil] encoding:NSUTF8StringEncoding];
+             @"listitem": ^JSValue *(JSValue *itemtext) {
+                 return [JSValue valueWithObject:@{@"type": @"li", @"text": itemtext} inContext:self.context];
              },
-             @"paragraph": ^NSString *(NSString *ptext) {
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"para", @"text": ptext} options:0 error:nil] encoding:NSUTF8StringEncoding];
+             @"paragraph": ^JSValue *(JSValue *ptext) {
+                 return [JSValue valueWithObject:@{@"type": @"para", @"text": ptext} inContext:self.context];
              },
-             @"table": ^NSString *(NSString *header, NSString *body) {
+             @"table": ^JSValue *(JSValue *header, JSValue *body) {
                  //NSLog(@"table %@ %@", header, body);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"table", @"header": header, @"body": body} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"table", @"header": header, @"body": body} inContext:self.context];
              },
-             @"tablerow": ^NSString *(NSString *content) {
+             @"tablerow": ^JSValue *(JSValue *content) {
                  //NSLog(@"tr %@", content);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"tr", @"text": content} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"tr", @"text": content} inContext:self.context];
              },
-             @"tablecell": ^NSString *(NSString *content, NSDictionary *flags) {
+             @"tablecell": ^JSValue *(JSValue *content, NSDictionary *flags) {
                  //NSLog(@"cell %@ %@", content, flags);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"cell", @"text": content, @"flags": flags} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"cell", @"text": content, @"flags": flags} inContext:self.context];
              },
-             @"strong": ^NSString *(NSString *text) {
+             @"strong": ^JSValue *(JSValue *text) {
                  //NSLog(@"strong %@", text);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"strong", @"text": text} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"strong", @"text": text} inContext:self.context];
              },
-             @"em": ^NSString *(NSString *text) {
+             @"em": ^JSValue *(JSValue *text) {
                  //NSLog(@"em %@", text.toString);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"em", @"text": text} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"em", @"text": text} inContext:self.context];
              },
-             @"codespan": ^NSString *(NSString *text) {
+             @"codespan": ^JSValue *(JSValue *text) {
                  //NSLog(@"codespan %@", text.toString);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"codespan", @"text": text} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"codespan", @"text": text} inContext:self.context];
              },
              @"br": ^NSString *() {
                  //NSLog(@"br");
                  return @"\n";
              },
-             @"del": ^NSString *(NSString *text) {
+             @"del": ^JSValue *(JSValue *text) {
                  //NSLog(@"del %@", text);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"del", @"text": text} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"del", @"text": text} inContext:self.context];
              },
-             @"link": ^NSString *(NSString *href, NSString *title, NSString *text) {
+             @"link": ^JSValue *(NSString *href, NSString *title, JSValue *text) {
                  //NSLog(@"link %@ %@ %@", href, title, text);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"link", @"href": href, @"title": title, @"text": text} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"link", @"href": href, @"title": title, @"text": text} inContext:self.context];
              },
-             @"image": ^NSString *(NSString *href, NSString *title, NSString *text) {
+             @"image": ^JSValue *(NSString *href, NSString *title, JSValue *text) {
                  //NSLog(@"image %@ %@ %@", href, title, text);
-                 return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type": @"image", @"href": href, @"title": title, @"alt": text} options:0 error:nil] encoding:NSUTF8StringEncoding];
+                 return [JSValue valueWithObject:@{@"type": @"image", @"href": href, @"title": title, @"alt": text} inContext:self.context];
              },
              @"text": ^NSString *(NSString *text) {
                  return text;
