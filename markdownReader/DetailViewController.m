@@ -9,7 +9,8 @@
 #import "DetailViewController.h"
 
 @interface DetailViewController ()
-
+@property MarkdownInterpreter *markdownInterpreter;
+@property (weak, nonatomic) IBOutlet UITextView *markdownView;
 @end
 
 @implementation DetailViewController
@@ -28,13 +29,27 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
+        self.markdownInterpreter = [[MarkdownInterpreter alloc] initWithDelegate:self];
+        self.title = [self.detailItem description];
+        NSData *markdownData = [NSData dataWithContentsOfURL:self.detailItem];
+        [self.markdownInterpreter interpretString:[[NSString alloc]
+                                                   initWithData:markdownData
+                                                   encoding:NSUTF8StringEncoding]];
     }
+}
+
+- (void)interpretFailedWithError:(NSError *)error
+{
+    NSLog(@"interpret failed: %@", error.localizedDescription);
+}
+
+- (void)interpretResult:(NSAttributedString *)result
+{
+    _markdownView.attributedText = result;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
 }
 

@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MarkdownInterpreter.h"
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController<MarkdownInterpreterDelegate>
 
 @property (strong, nonatomic) id detailItem;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 
 @end
 

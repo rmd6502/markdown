@@ -33,6 +33,7 @@
     NSArray *documentUrls = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
     if ([documentUrls count] > 0) {
         _presentedItemURL = documentUrls[0];
+        NSLog(@"document url: %@", _presentedItemURL);
         _presentedItemOperationQueue = [NSOperationQueue new];
         [_presentedItemOperationQueue setUnderlyingQueue:_backgroundQueue];
         _fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:self];
@@ -102,14 +103,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDate *object = self.objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    NSURL *object = self.objects[indexPath.row];
+    NSString *fileName = nil;
+    NSError *error = nil;
+    [object getResourceValue:&fileName forKey:NSURLNameKey error:&error];
+    if (error) {
+        cell.textLabel.text = error.localizedDescription;
+    } else {
+        cell.textLabel.text = fileName;
+    }
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -141,11 +149,11 @@
             if (![fileName hasSuffix:@".md"]) {
                 continue;
             }
-            [documentFiles addObject:fileName];
+            [documentFiles addObject:entry];
         }
-        [documentFiles sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            return [(NSString *)obj1 compare:(NSString *)obj2];
-        }];
+//        [documentFiles sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//            return [(NSString *)obj1 compare:(NSString *)obj2];
+//        }];
         self.objects = documentFiles;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];

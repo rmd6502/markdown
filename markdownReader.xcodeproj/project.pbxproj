@@ -16,6 +16,10 @@
 		9C9751901CC2ABE700A43C40 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C97518E1CC2ABE700A43C40 /* LaunchScreen.storyboard */; };
 		9C97519B1CC2ABE700A43C40 /* markdownReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C97519A1CC2ABE700A43C40 /* markdownReaderTests.m */; };
 		9C9751A61CC2ABE700A43C40 /* markdownReaderUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9751A51CC2ABE700A43C40 /* markdownReaderUITests.m */; };
+		9C9751B51CC2BF8100A43C40 /* MarkdownInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9751B41CC2BF8100A43C40 /* MarkdownInterpreter.m */; };
+		9C9751B61CC2BF8100A43C40 /* MarkdownInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9751B41CC2BF8100A43C40 /* MarkdownInterpreter.m */; };
+		9C9751B91CC2BFD100A43C40 /* marked.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C9751B81CC2BFD100A43C40 /* marked.min.js */; };
+		9C9751BA1CC2BFD100A43C40 /* marked.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C9751B81CC2BFD100A43C40 /* marked.min.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,9 @@
 		9C9751A11CC2ABE700A43C40 /* markdownReaderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = markdownReaderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9751A51CC2ABE700A43C40 /* markdownReaderUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = markdownReaderUITests.m; sourceTree = "<group>"; };
 		9C9751A71CC2ABE700A43C40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C9751B31CC2BF8100A43C40 /* MarkdownInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkdownInterpreter.h; sourceTree = "<group>"; };
+		9C9751B41CC2BF8100A43C40 /* MarkdownInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkdownInterpreter.m; sourceTree = "<group>"; };
+		9C9751B81CC2BFD100A43C40 /* marked.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = marked.min.js; path = ../../marked/marked.min.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +122,8 @@
 				9C97518E1CC2ABE700A43C40 /* LaunchScreen.storyboard */,
 				9C9751911CC2ABE700A43C40 /* Info.plist */,
 				9C97517D1CC2ABE700A43C40 /* Supporting Files */,
+				9C9751B31CC2BF8100A43C40 /* MarkdownInterpreter.h */,
+				9C9751B41CC2BF8100A43C40 /* MarkdownInterpreter.m */,
 			);
 			path = markdownReader;
 			sourceTree = "<group>";
@@ -122,6 +131,7 @@
 		9C97517D1CC2ABE700A43C40 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9C9751B71CC2BFB200A43C40 /* Resources */,
 				9C97517E1CC2ABE700A43C40 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -143,6 +153,14 @@
 				9C9751A71CC2ABE700A43C40 /* Info.plist */,
 			);
 			path = markdownReaderUITests;
+			sourceTree = "<group>";
+		};
+		9C9751B71CC2BFB200A43C40 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9C9751B81CC2BFD100A43C40 /* marked.min.js */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,6 +269,7 @@
 			files = (
 				9C9751901CC2ABE700A43C40 /* LaunchScreen.storyboard in Resources */,
 				9C97518D1CC2ABE700A43C40 /* Assets.xcassets in Resources */,
+				9C9751B91CC2BFD100A43C40 /* marked.min.js in Resources */,
 				9C97518B1CC2ABE700A43C40 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,6 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C9751BA1CC2BFD100A43C40 /* marked.min.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C9751B51CC2BF8100A43C40 /* MarkdownInterpreter.m in Sources */,
 				9C9751821CC2ABE700A43C40 /* AppDelegate.m in Sources */,
 				9C9751851CC2ABE700A43C40 /* MasterViewController.m in Sources */,
 				9C97517F1CC2ABE700A43C40 /* main.m in Sources */,
@@ -288,6 +309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C97519B1CC2ABE700A43C40 /* markdownReaderTests.m in Sources */,
+				9C9751B61CC2BF8100A43C40 /* MarkdownInterpreter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
